@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>D3 - Donut - Chart</title>
+
+    <!-- D3 JS -->
+    <script src="https://d3js.org/d3.v4.min.js" data-semver="4.0.0" data-require="d3@*"></script>
+</head>
+<body>
+    <div id="chart"></div>
+
+    <script>
+        
+
+(function(d3) {
+    'use strict';
+
+    var dataset = [
+      { label: 'Abulia', count: 100, color: '#1BBB84'}, 
+      { label: 'Betelgeuse', count: 200, color: '#FFA200'},
+      { label: 'Cantaloupe', count: 60, color: '#636363'}
+    ];
+
+    var width = 177;
+    var height = 177;
+    var radius = Math.min(width, height) / 2;
+    var donutWidth = 20;                            // NEW
+
+    //var color = d3.scaleOrdinal(d3.schemeCategory20b);
+
+    var svg = d3.select('#chart')
+      .append('svg')
+      .attr('width', width)
+      .attr('height', height)
+      .append('g')
+      .attr('transform', 'translate(' + (width / 2) + 
+        ',' + (height / 2) + ')');
+
+    var arc = d3.arc()
+      .innerRadius(radius - donutWidth)             // NEW
+      .outerRadius(radius);
+      
+    var pie = d3.pie()
+      .value(function(d) { return d.count; })
+      .sort(null);
+
+    var path = svg.selectAll('path')
+      .data(pie(dataset))
+      .enter()
+      .append('path')
+      .attr('d', arc)
+      .attr('fill',function(d){
+          return d.data.color;
+      });
+
+  })(window.d3);
+    </script>
+</body>
+</html>
